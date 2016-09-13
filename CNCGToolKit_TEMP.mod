@@ -1,0 +1,3 @@
++ PLATFORM:win64 CNCGToolKit 1.0.0 {ROOT_DIR}/maya
+PYTHONPATH += {ROOT_DIR}/cgtkLibs
+PYTHONPATH += {ROOT_DIR}/pyLibs
