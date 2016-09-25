@@ -1,0 +1,13 @@
+# STUDIO CONFIG
+deadline:
+  path: ~
+  default_pool: ~
+
+python:
+  path: ~
+
+email:
+  name: CGTK
+  from: ~
+  password: ~
+  smtp_server: ~

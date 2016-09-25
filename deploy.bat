@@ -1,18 +1,13 @@
 echo off
-rem TODO: 仅仅是写了一部分，全部代码都没有测试过。
 rem get mod template file
-set mod_temp_path = %cd%\CNCGToolKit_TEMP.mod
-set mod_copy_path = %cd%\CNCGToolKit.mod
+set mod_temp_path= %cd%\templates\CNCGToolKit_TEMP.mod
+set mod_copy_path= %USERPROFILE%\Documents\maya\modules\CNCGToolKit.mod
 
 rem copy template file
 XCopy %mod_temp_path% %mod_copy_path%*
 
 rem replace {ROOT_DIR} by current path
 call :FindReplace "{ROOT_DIR}" %cd% %mod_copy_path%
-rem TODO: get maya doc folder path
-
-rem TODO: rename and copy mod file to maya doc folder
-
 
 rem functions
 :FindReplace <findstr> <replstr> <file>
