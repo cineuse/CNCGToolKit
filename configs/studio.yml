@@ -1,13 +1,26 @@
 # STUDIO CONFIG
 deadline:
-  path: ~
-  default_pool: ~
+  path:
+    windows: "hello, I am the deadline windows path"
+    linux: ~
+    osx: ~
+  default_pool: "hello, I am the deadline default pool"
 
 python:
-  path: ~
+  path:
+    windows: "C:/python27/python.exe"
+    linux: "python"
+    osx: "python"
 
 email:
   name: CGTK
-  from: ~
-  password: ~
-  smtp_server: ~
+  from: "guoliangxu1987@163.com"
+  password: "220558@wangyi"
+  smtp_server: "smtp.163.com"
+  port: 25
+  ssl: yes
+
+preset_paths:
+  user_path:
+    windows: "{env-USERPROFILE}/.cgtk"
+    linux: "/usr/.cgtk"

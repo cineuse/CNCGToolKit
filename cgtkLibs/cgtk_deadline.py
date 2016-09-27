@@ -8,6 +8,8 @@ import cgtk_log
 from cgtk_os import TemporaryDirectory
 from cgtk_config import studio_config
 
+log = cgtk_log.cgtk_log(level=logging.INFO)
+
 
 class DeadlineSubmission(object):
     def __init__(self):

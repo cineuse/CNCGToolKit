@@ -16,7 +16,7 @@ def format_addr(s):
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
 
-def send_mail(to_addr, SubjectString, body, image=None):
+def send_mail(to_addr, subject_string, body, image=None):
     email_cfg = studio_config.get('email')
     from_addr = email_cfg['from']
     password = email_cfg['password']
@@ -25,7 +25,7 @@ def send_mail(to_addr, SubjectString, body, image=None):
     msg_root = MIMEMultipart('related')
     msg_root['From'] = format_addr('cgtk-%s<%s>' % (email_cfg["name"], from_addr))
     msg_root['To'] = format_addr('user<%s>' % to_addr)
-    msg_root['Subject'] = Header(SubjectString, 'utf-8').encode()
+    msg_root['Subject'] = Header(subject_string, 'utf-8').encode()
     if image is not None:
         msg_text = MIMEText(body_string + '<br><img src="cid:image1">', 'html')
         msg_root.attach(msg_text)
@@ -50,4 +50,4 @@ def send_mail(to_addr, SubjectString, body, image=None):
 
 
 if __name__ == "__main__":
-    pass
+    send_mail("guoliangxu1987@qq.com", "CGTK Test", "Hello, this is a test", image=None)
