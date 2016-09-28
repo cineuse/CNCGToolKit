@@ -7,8 +7,7 @@ PROJECT_ROOT_NAME = "CNCGToolKit"
 
 
 def get_studio_cfg_path():
-    current_dir = os.path.dirname(__file__)
-    root_path = os.path.join(current_dir.split(PROJECT_ROOT_NAME)[0], PROJECT_ROOT_NAME, "configs", "studio.yml")
+    root_path = os.path.join(os.path.dirname(__file__), "../../", "configs", "studio.yml")
     return root_path
 
 
