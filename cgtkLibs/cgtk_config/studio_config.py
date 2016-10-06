@@ -23,7 +23,7 @@ def format_result(result):
         for key, value in result.iteritems():
             if isinstance(value, dict):
                 result[key] = format_result(value)
-        if set(result.keys()) == {"windows", "linux", "osx"}:
+        if set(result.keys()).issubset({"windows", "linux", "osx"}):
             result = result.get(platform.system().lower())
     return result
 

@@ -8,8 +8,8 @@ deadline:
 
 python:
   path:
-    windows: "C:/python27/python.exe"
     linux: "python"
+    windows: "C:/python27/python.exe"
     osx: "python"
 
 email:
@@ -22,5 +22,5 @@ email:
 
 preset_paths:
   user_path:
-    windows: "{env-USERPROFILE}/.cgtk"
     linux: "/usr/.cgtk"
+    windows: "{env-USERPROFILE}/.cgtk"
