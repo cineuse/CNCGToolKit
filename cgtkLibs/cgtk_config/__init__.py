@@ -3,4 +3,4 @@
 
 import sys
 sys.path.append("..")
-sys.path.append(".../pyLibs")
+sys.path.append("../../pyLibs")
