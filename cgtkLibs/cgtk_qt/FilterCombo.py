@@ -15,11 +15,10 @@ if "PySide" not in QtCompat.__binding__:
 
 
 class FilterCombo(QtGui.QComboBox):
-    def __init__(self, item_list, parent=None):
+    def __init__(self, parent=None):
         super(FilterCombo, self).__init__(parent)
 
-        self.item_list = item_list
-
+        self.__item_list = []
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.setEditable(True)
         self.completer = QtGui.QCompleter(self)
@@ -30,12 +29,9 @@ class FilterCombo(QtGui.QComboBox):
         self.pFilterModel.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
 
         # set models
-        self.source_model = QtGui.QStandardItemModel()
-        for i, word in enumerate(self.item_list):
-            item = QtGui.QStandardItem(word)
-            self.source_model.setItem(i, 0, item)
-        super(FilterCombo, self).setModel(self.source_model)
-        self.pFilterModel.setSourceModel(self.source_model)
+        self.model = QtGui.QStandardItemModel()
+        super(FilterCombo, self).setModel(self.model)
+        self.pFilterModel.setSourceModel(self.model)
         self.completer.setModel(self.pFilterModel)
         self.setModelColumn(0)
 
@@ -47,21 +43,39 @@ class FilterCombo(QtGui.QComboBox):
         self.lineEdit().editingFinished.connect(self.edit_done)
         self.completer.activated.connect(self.setTextIfCompleterIsClicked)
 
-        # select text
-        self.lineEdit().selectAll()
+
+    @property
+    def item_list(self):
+        return self.__item_list
+
+    @item_list.setter
+    def item_list(self, value):
+        if type(value) not in [list, tuple]:
+            value = [value]
+        self.__item_list = value
+        # setup model
+        for i, word in enumerate(self.item_list):
+            item = QtGui.QStandardItem(word)
+            self.model.setItem(i, 0, item)
 
     @QtCore.Slot()
     def edit_done(self):
-        # select first matched item or first item
-        matched_index = self.pFilterModel.mapToSource(self.pFilterModel.index(0, 0))
-        if matched_index.row() >= len(self.item_list):
-            self.setCurrentIndex(0)
+        text = self.lineEdit().text()
+        if text not in self.__item_list:
+            # select first matched item or first item
+            text = self.pFilterModel.data(self.pFilterModel.index(0, 0))
+        if text:
+            index = self.findText(text)
+            self.setCurrentIndex(index)
         else:
-            self.setCurrentIndex(matched_index.row())
+            self.setCurrentIndex(0)
         # delete unmatched text
-        self.source_model.removeRows(len(self.item_list), 1)
-        # select all text
-        self.lineEdit().selectAll()
+        self.model.removeRows(len(self.item_list), 1)
+
+    def set_current_text(self, text):
+        if text in self.__item_list:
+            index = self.findText(text)
+            self.setCurrentIndex(index)
 
     def setModelColumn(self, column):
         self.completer.setCompletionColumn(column)
@@ -84,7 +98,8 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
     my_item_list = ['hello', 'world', 'hi', 'babe', 'baby']
-    combo = FilterCombo(my_item_list)
+    combo = FilterCombo()
+    combo.item_list = my_item_list
 
     combo.show()
 
