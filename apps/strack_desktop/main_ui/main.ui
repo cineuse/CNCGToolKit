@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
-    <height>797</height>
+    <width>432</width>
+    <height>805</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -379,7 +379,7 @@ color: rgb(255, 255, 255);</string>
         <property name="styleSheet">
          <string notr="true">background-color: #E0E0E0;
 padding:3px;
-border-color:#D2D2D2;
+border-color:#E7EFF8;
 border-width:1px 0px 1px 0px;
 border-style:solid;</string>
         </property>
@@ -538,7 +538,15 @@ QToolButton#chat_btn::checked
           <number>0</number>
          </property>
          <item>
-          <widget class="ActionsUI" name="widget" native="true"/>
+          <widget class="QStackedWidget" name="work_stack">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="ActionsUI" name="action_stack"/>
+           <widget class="MyTasksUI" name="mytask_stack"/>
+           <widget class="PublishUI" name="publish_stack"/>
+           <widget class="ChatUI" name="chat_stack"/>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -560,7 +568,7 @@ QToolButton#chat_btn::checked
         <property name="styleSheet">
          <string notr="true">background-color: #E0E0E0;
 padding:0px;
-border-color:#D2D2D2;
+border-color:#E7EFF8;
 border-width:1px 0px 0px 0px;
 border-style:solid;</string>
         </property>
@@ -575,7 +583,7 @@ border-style:solid;</string>
           <number>0</number>
          </property>
          <item>
-          <layout class="QHBoxLayout" name="menu_layout">
+          <layout class="QHBoxLayout" name="menu_layout" stretch="0,0,0">
            <item>
             <spacer name="horizontalSpacer_7">
              <property name="orientation">
@@ -586,7 +594,7 @@ border-style:solid;</string>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>5</width>
+               <width>10</width>
                <height>0</height>
               </size>
              </property>
@@ -660,6 +668,24 @@ QToolButton#menu_btn::checked
    <class>ActionsUI</class>
    <extends>QWidget</extends>
    <header>actions_ui/ActionsUI</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MyTasksUI</class>
+   <extends>QWidget</extends>
+   <header>mytasks_ui/MyTasksUI</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PublishUI</class>
+   <extends>QWidget</extends>
+   <header>publish_ui/PublishUI</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ChatUI</class>
+   <extends>QWidget</extends>
+   <header>chat_ui</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

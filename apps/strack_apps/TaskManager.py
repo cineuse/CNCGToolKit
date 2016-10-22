@@ -7,7 +7,6 @@ import Qt.QtGui as QtGui
 import Qt.QtCore as QtCore
 import cgtk_log
 import cgtk_qt
-from .. import standalone_env
 
 log = cgtk_log.cgtk_log(level=logging.INFO)
 
