@@ -54,9 +54,11 @@ class FilterCombo(QtGui.QComboBox):
             value = [value]
         self.__item_list = value
         # setup model
+        self.model.clear()
         for i, word in enumerate(self.item_list):
             item = QtGui.QStandardItem(word)
             self.model.setItem(i, 0, item)
+        self.setCurrentIndex(0)
 
     @QtCore.Slot()
     def edit_done(self):
@@ -70,7 +72,7 @@ class FilterCombo(QtGui.QComboBox):
         else:
             self.setCurrentIndex(0)
         # delete unmatched text
-        self.model.removeRows(len(self.item_list), 1)
+        self.model.removeRows(len(self.item_list), 9999)
 
     def set_current_text(self, text):
         if text in self.__item_list:

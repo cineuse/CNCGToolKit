@@ -38,30 +38,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QTabWidget" name="task_page">
-           <property name="currentIndex">
-            <number>0</number>
-           </property>
-           <widget class="QWidget" name="asset_tab">
-            <attribute name="title">
-             <string>Asset</string>
-            </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_10">
-             <item>
-              <widget class="QTreeView" name="task_tree"/>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="shot_tab">
-            <attribute name="title">
-             <string>Shot</string>
-            </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_9">
-             <item>
-              <widget class="QTreeView" name="treeView"/>
-             </item>
-            </layout>
-           </widget>
+          <widget class="QTreeView" name="task_tree">
+           <attribute name="headerVisible">
+            <bool>true</bool>
+           </attribute>
           </widget>
          </item>
          <item>
@@ -85,24 +65,19 @@
             </property>
             <item>
              <property name="text">
-              <string>project</string>
+              <string>Project</string>
              </property>
             </item>
            </widget>
           </item>
           <item>
-           <widget class="FilterCombo" name="entity_type_combo">
+           <widget class="FilterCombo" name="area_combo">
             <property name="editable">
              <bool>true</bool>
             </property>
             <item>
              <property name="text">
-              <string>Asset</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Shot</string>
+              <string>Area</string>
              </property>
             </item>
            </widget>
@@ -114,7 +89,7 @@
             </property>
             <item>
              <property name="text">
-              <string>sequence</string>
+              <string>Parent</string>
              </property>
             </item>
            </widget>
@@ -126,7 +101,7 @@
             </property>
             <item>
              <property name="text">
-              <string>shot</string>
+              <string>Entity</string>
              </property>
             </item>
            </widget>
@@ -138,7 +113,7 @@
             </property>
             <item>
              <property name="text">
-              <string>task</string>
+              <string>Task</string>
              </property>
             </item>
            </widget>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>805</height>
+    <width>473</width>
+    <height>803</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -74,9 +74,15 @@ background-color: rgb(255, 255, 255);
          <string notr="true">QGroupBox#top_grp
 {
 	background-image: url(:/backgroud/top_back.png);
-	border:none;
 	padding:0;
 	margin:0;
+	border-style:soild;
+	border-width: 0px;
+	border-top-left-radius:2px;
+	border-top-right-radius:2px;
+	border-bottom-right-radius:0px;
+	border-bottom-left-radius:0px;
+
 }</string>
         </property>
         <property name="title">
@@ -91,7 +97,7 @@ background-color: rgb(255, 255, 255);
         <property name="checkable">
          <bool>false</bool>
         </property>
-        <layout class="QVBoxLayout" name="top_group_layout" stretch="1,2">
+        <layout class="QVBoxLayout" name="top_group_layout" stretch="0,0">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -193,6 +199,18 @@ color: rgb(255, 255, 255);</string>
             </item>
             <item>
              <widget class="QToolButton" name="minimize_btn">
+              <property name="minimumSize">
+               <size>
+                <width>25</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>25</width>
+                <height>25</height>
+               </size>
+              </property>
               <property name="styleSheet">
                <string notr="true">QToolButton#minimize_btn
 {
@@ -204,7 +222,7 @@ color: rgb(255, 255, 255);</string>
 QToolButton#minimize_btn::hover
 {
 	image: url(:/icons/min_white.png);
-	background-color: #e0e0e0;
+	background-color: rgba(135, 158, 199, 100);;
 }</string>
               </property>
               <property name="text">
@@ -230,6 +248,18 @@ QToolButton#minimize_btn::hover
             </item>
             <item>
              <widget class="QToolButton" name="close_btn">
+              <property name="minimumSize">
+               <size>
+                <width>25</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>25</width>
+                <height>25</height>
+               </size>
+              </property>
               <property name="styleSheet">
                <string notr="true">QToolButton#close_btn
 {
@@ -570,7 +600,11 @@ QToolButton#chat_btn::checked
 padding:0px;
 border-color:#E7EFF8;
 border-width:1px 0px 0px 0px;
-border-style:solid;</string>
+border-style:solid;
+border-top-left-radius:0px;
+border-top-right-radius:0px;
+border-bottom-right-radius:2px;
+border-bottom-left-radius:2px;</string>
         </property>
         <property name="title">
          <string/>
