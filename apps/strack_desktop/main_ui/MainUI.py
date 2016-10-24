@@ -59,12 +59,8 @@ class MainUI(FormClass, BaseClass):
         self.tab_btn_grp.addButton(self.chat_btn)
         self.tab_btn_grp.setExclusive(True)
 
-        # add pages
-        # self.action_page = ActionsUI()
-        # self.action_layout.addWidget(self.action_page)
-
         # change tab page
-        # self.tab_btn_grp.buttonClicked.connect(self.tab_change)
+        self.tab_btn_grp.buttonClicked.connect(self.tab_change)
 
     def tab_change(self):
         page_dict = {"action_btn": 0,

@@ -1,0 +1,6 @@
+<RCC>
+  <qresource>
+    <file>backgroud/top_back.png</file>
+    <file>thumbnails/default_avatar.png</file>
+  </qresource>
+</RCC>

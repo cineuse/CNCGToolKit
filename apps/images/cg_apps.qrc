@@ -1,0 +1,21 @@
+<RCC>
+  <qresource>
+    <file>thumbnails/cg_apps/photoshop cc.png</file>
+    <file>thumbnails/cg_apps/after_effects.png</file>
+    <file>thumbnails/cg_apps/cinesync.png</file>
+    <file>thumbnails/cg_apps/hiero.png</file>
+    <file>thumbnails/cg_apps/hieroplayer.png</file>
+    <file>thumbnails/cg_apps/mari.png</file>
+    <file>thumbnails/cg_apps/maya.png</file>
+    <file>thumbnails/cg_apps/nuke.png</file>
+    <file>thumbnails/cg_apps/nuke_studio.png</file>
+    <file>thumbnails/cg_apps/nukex.png</file>
+    <file>thumbnails/cg_apps/photoshop.png</file>
+    <file>thumbnails/cg_apps/prelude.png</file>
+    <file>thumbnails/cg_apps/premiere.png</file>
+    <file>thumbnails/cg_apps/maya.png</file>
+    <file>thumbnails/cg_apps/nuke.png</file>
+    <file>thumbnails/cg_apps/nukex.png</file>
+    <file>thumbnails/cg_apps/photoshop.png</file>
+  </qresource>
+</RCC>

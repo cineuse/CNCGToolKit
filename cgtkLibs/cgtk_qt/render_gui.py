@@ -8,11 +8,10 @@ import Qt.QtCore as QtCore
 from load_style import load_style
 from StrackColorScheme import StrackColorScheme
 
+QSS_DIR = os.path.join(os.path.dirname(__file__), "styles")
 
-def_style = load_style(os.path.join(os.path.dirname(__file__), "styles/test.qss"))
 
-
-def render_gui(GUIClass, app=None, style=def_style, singleton=True):
+def render_gui(GUIClass, app=None, style="default", singleton=True):
     # init event loop
     if not app:
         use_default_app = True
@@ -22,15 +21,19 @@ def render_gui(GUIClass, app=None, style=def_style, singleton=True):
     # init gui object
     gui_obj = GUIClass()
     # set stylesheet
+    qss_name = r"%s/%s.qss" % (QSS_DIR, style)
+    if not os.path.isfile(qss_name):
+        qss_name = r"%s/%s.qss" % (QSS_DIR, "default")
+    stylesheet = load_style(qss_name)
     if isinstance(gui_obj, QtGui.QWidget):
-        gui_obj.setStyleSheet(style)
+        gui_obj.setStyleSheet(stylesheet)
     # singleton
     if singleton:
         for widget in app.allWidgets():
             if gui_obj.objectName() == widget.objectName():
                 widget.close()
     # set Color Scheme
-    StrackColorScheme()
+    StrackColorScheme(baseColor=QtGui.QColor(50, 50, 50), highlightColor=QtGui.QColor(247, 147, 30), spread=2.5)
     # run gui
     gui_obj.show()
     # don't close after window closed

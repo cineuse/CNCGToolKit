@@ -53,15 +53,15 @@ class StrackColorScheme(object):
 
         self.palette.setBrush(QPalette.Window, QBrush(BASE_COLOR))
 
-        self.palette.setBrush(QPalette.WindowText, QBrush(BASE_COLOR.lighter(SPREAD)))
+        self.palette.setBrush(QPalette.WindowText, QBrush(BASE_COLOR.lighter(SPREAD * 2)))
         self.palette.setBrush(QPalette.Foreground, QBrush(BASE_COLOR.lighter(SPREAD)))
         self.palette.setBrush(QPalette.Base, QBrush(BASE_COLOR))
         self.palette.setBrush(QPalette.AlternateBase, QBrush(BASE_COLOR.darker(SPREAD)))
         self.palette.setBrush(QPalette.ToolTipBase, QBrush(BASE_COLOR))
         self.palette.setBrush(QPalette.ToolTipText, QBrush(BASE_COLOR.lighter(SPREAD)))
-        self.palette.setBrush(QPalette.Text, QBrush(BASE_COLOR.lighter(SPREAD * 1.2)))
+        self.palette.setBrush(QPalette.Text, QBrush(BASE_COLOR.lighter(SPREAD * 1.8)))
         self.palette.setBrush(QPalette.Button, QBrush(BASE_COLOR))
-        self.palette.setBrush(QPalette.ButtonText, QBrush(BASE_COLOR.lighter(SPREAD)))
+        self.palette.setBrush(QPalette.ButtonText, QBrush(BASE_COLOR.lighter(SPREAD * 1.2)))
         self.palette.setBrush(QPalette.BrightText, QBrush(QColor("#ffffff")))
 
         self.palette.setBrush(QPalette.Light, QBrush(BASE_COLOR.lighter(SPREAD)))

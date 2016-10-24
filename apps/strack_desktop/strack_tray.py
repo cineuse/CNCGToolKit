@@ -6,6 +6,7 @@ import icons_rc
 
 import cgtk_qt
 import main_ui
+from pw_multiScriptEditor import scriptEditor
 
 
 class StrackTrayIcon(QtGui.QSystemTrayIcon):
@@ -27,10 +28,12 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         # todo: 重构为表驱动
         app = QtGui.QApplication.instance()
         action_list = []
+        script_editor = QtGui.QAction("&ScriptEditor", self, triggered=self.call_script_editor)
         configAction = QtGui.QAction("&Config", self, triggered=self.call_configUI)
         helpAction = QtGui.QAction("&Help", self, triggered=self.call_helpUI)
         feedbackAction = QtGui.QAction("&FeedBack", self, triggered=self.call_feedbackUI)
         quitAction = QtGui.QAction("&Quit", self, triggered=app.quit)
+        action_list.append(script_editor)
         action_list.append(configAction)
         action_list.append(helpAction)
         action_list.append(feedbackAction)
@@ -46,9 +49,13 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         if reason in (QtGui.QSystemTrayIcon.Trigger, QtGui.QSystemTrayIcon.DoubleClick):
             self.call_mainUI()
 
+    def call_script_editor(self):
+        app = QtGui.QApplication.instance()
+        cgtk_qt.render_gui(GUIClass=scriptEditor.scriptEditorClass, app=app, singleton=True)
+
     def call_mainUI(self):
         app = QtGui.QApplication.instance()
-        self.main_window = cgtk_qt.render_gui(GUIClass=main_ui.MainUI, app=app, singleton=True)
+        self.main_window = cgtk_qt.render_gui(GUIClass=main_ui.MainUI, app=app, style="strack_main", singleton=True)
 
     def call_configUI(self):
         # todo: show config UI
@@ -63,4 +70,5 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         print "show feedback UI here..."
 
 if __name__ == '__main__':
+    import standalone_env
     cgtk_qt.render_gui(StrackTrayIcon)
