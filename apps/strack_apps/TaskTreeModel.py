@@ -177,7 +177,7 @@ class TaskFilterProxyModel(QtGui.QSortFilterProxyModel):
         super(TaskFilterProxyModel, self).__init__()
         self.setDynamicSortFilter(True)
         self.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        self.approved_checked = False
+        self.unfinished_only = False
 
     def filterAcceptsRow(self, row_num, source_parent):
         ''' Overriding the parent function '''
@@ -193,11 +193,11 @@ class TaskFilterProxyModel(QtGui.QSortFilterProxyModel):
         return self.has_accepted_children(row_num, source_parent)
 
     def filter_accepts_row_itself(self, row_num, parent):
-        appr_index = self.sourceModel().index(row_num, 1, parent)
-        approved = self.sourceModel().data(appr_index, QtCore.Qt.DisplayRole) == "approve"
+        status_index = self.sourceModel().index(row_num, 1, parent)
         filter_result = super(TaskFilterProxyModel, self).filterAcceptsRow(row_num, parent)
-        if self.approved_checked:
-            return filter_result and approved
+        if self.unfinished_only:
+            unfinished = self.sourceModel().data(status_index, QtCore.Qt.DisplayRole) != "approved"
+            return filter_result and unfinished
         else:
             return filter_result
 
