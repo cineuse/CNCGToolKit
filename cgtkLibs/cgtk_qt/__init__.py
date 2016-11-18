@@ -5,4 +5,5 @@ from dropable import dropable
 from setup_ui import setup_ui
 from load_ui_type import load_ui_type
 from render_gui import render_gui
+from progress_dialog import progress_dialog
 import syntax

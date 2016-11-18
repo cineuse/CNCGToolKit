@@ -8,6 +8,11 @@ import cgtk_log
 
 log = cgtk_log.cgtk_log(level=logging.INFO)
 
+NAME_COL_NUM = 0
+STATUS_COL_NUM = 1
+ASSIGN_COL_NUM = 2
+ALL_COL_NUM = 3
+
 
 class Node(object):
     def __init__(self, name, parent=None):
@@ -55,10 +60,12 @@ class Node(object):
 
 
 class ParentNode(Node):
-    def __init__(self, strack_node, parent=None):
-        self.st_task_node = strack_node
-        name = self.st_task_node.get("name")
+    def __init__(self, name, parent=None):
         super(ParentNode, self).__init__(name, parent)
+        self.__name = name
+
+    def name(self):
+        return self.__name
 
     @property
     def node_type(self):
@@ -67,8 +74,8 @@ class ParentNode(Node):
 
 class EntityNode(Node):
     def __init__(self, strack_node, parent=None):
-        self.st_task_node = strack_node
-        name = self.st_task_node.get("name")
+        self.st_entity_node = strack_node
+        name = self.st_entity_node.get("item_name")
         super(EntityNode, self).__init__(name, parent)
 
     @property
@@ -79,11 +86,11 @@ class EntityNode(Node):
 class TaskNode(Node):
     def __init__(self, strack_node, parent=None):
         self.st_task_node = strack_node
-        name = self.st_task_node.get("name")
+        name = self.st_task_node.get("content")
         super(TaskNode, self).__init__(name, parent)
         # todo: get info via a strack node
-        self.people = "XX"
-        self.status = self.st_task_node.get("status")
+        self.assignee = self.st_task_node.get("assignee")
+        self.status = self.st_task_node.get("status").get("status_name")
         self.date = "2016-10-14"
         self.description = "great work!"
 
@@ -95,7 +102,7 @@ class TaskNode(Node):
         parent_name = parent.name()
         entity_name = entity.name()
         task_name = self.name()
-        return "%s_%s_%s" % (parent_name, entity_name, task_name)
+        return "%s_%s_%s_%s" % (parent_name, entity_name, task_name, self.assignee)
 
     @property
     def node_type(self):
@@ -133,23 +140,25 @@ class TaskTreeModel(QtCore.QAbstractItemModel):
         return parent_node.childCount()
 
     def columnCount(self, parent):
-        return 2
+        return 3
 
     def data(self, index, role):
         if not index.isValid():
             return
         node = index.internalPointer()
         if role == QtCore.Qt.DisplayRole:
-            if index.column() == 0:
+            if index.column() == NAME_COL_NUM:
                 return node.name()
-            if index.column() == 1 and node.node_type == "task":
+            if index.column() == STATUS_COL_NUM and node.node_type == "task":
                 return node.status
-            if index.column() == 2 and node.node_type == "task":
+            if index.column() == ASSIGN_COL_NUM and node.node_type == "task":
+                return node.assignee
+            if index.column() == ALL_COL_NUM and node.node_type == "task":
                 # this hided column is for filtering
                 return node.long_name
 
     def headerData(self, section, orientation, role):
-        header_list = ["name", "status"]
+        header_list = ["name", "status", "assign"]
         if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
             return header_list[section]
 
@@ -161,7 +170,7 @@ class TaskTreeModel(QtCore.QAbstractItemModel):
         parent_node = node.parent()
         if parent_node == self.root_node:
             return QtCore.QModelIndex()
-        return self.createIndex(parent_node.row(), 0, parent_node)
+        return self.createIndex(parent_node.row(), NAME_COL_NUM, parent_node)
 
     def index(self, row, column, parent):
         parent_node = self.getNode(parent)
@@ -178,9 +187,10 @@ class TaskFilterProxyModel(QtGui.QSortFilterProxyModel):
         self.setDynamicSortFilter(True)
         self.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
         self.unfinished_only = False
+        self.my_tasks_only = False
 
     def filterAcceptsRow(self, row_num, source_parent):
-        ''' Overriding the parent function '''
+        """ Overriding the parent function """
         # Check if the current row matches
         if self.filter_accepts_row_itself(row_num, source_parent):
             return True
@@ -193,18 +203,24 @@ class TaskFilterProxyModel(QtGui.QSortFilterProxyModel):
         return self.has_accepted_children(row_num, source_parent)
 
     def filter_accepts_row_itself(self, row_num, parent):
-        status_index = self.sourceModel().index(row_num, 1, parent)
         filter_result = super(TaskFilterProxyModel, self).filterAcceptsRow(row_num, parent)
+
         if self.unfinished_only:
+            status_index = self.sourceModel().index(row_num, STATUS_COL_NUM, parent)
             unfinished = self.sourceModel().data(status_index, QtCore.Qt.DisplayRole) != "approved"
-            return filter_result and unfinished
-        else:
-            return filter_result
+            filter_result = filter_result and unfinished
+        if self.my_tasks_only:
+            me = "aaron"        # todo: get me from env
+            assign_index = self.sourceModel().index(row_num, ASSIGN_COL_NUM, parent)
+            is_my_task = self.sourceModel().data(assign_index, QtCore.Qt.DisplayRole) == me
+            filter_result = filter_result and is_my_task
+
+        return filter_result
 
     def filter_accepts_any_parent(self, parent):
-        ''' Traverse to the root node and check if any of the
+        """ Traverse to the root node and check if any of the
             ancestors match the filter
-        '''
+        """
         while parent.isValid():
             if self.filter_accepts_row_itself(parent.row(), parent.parent()):
                 return True
@@ -212,9 +228,9 @@ class TaskFilterProxyModel(QtGui.QSortFilterProxyModel):
         return False
 
     def has_accepted_children(self, row_num, parent):
-        ''' Starting from the current node as root, traverse all
+        """ Starting from the current node as root, traverse all
             the descendants and test if any of the children match
-        '''
+        """
         model = self.sourceModel()
         source_index = model.index(row_num, 0, parent)
         children_count = model.rowCount(source_index)

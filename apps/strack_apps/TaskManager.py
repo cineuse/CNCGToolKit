@@ -5,14 +5,23 @@ import os
 import logging
 import Qt.QtGui as QtGui
 import Qt.QtCore as QtCore
+import itertools
+
 import cgtk_log
 import cgtk_qt
 from TaskTreeModel import TaskTreeModel, TaskFilterProxyModel, TaskNode, EntityNode, ParentNode, Node
+
+import sys
+
+sys.path.append(r"E:\repos\strack_python_api\src\strack_api")
+import strack
+import strack_server_temp
 
 log = cgtk_log.cgtk_log(level=logging.INFO)
 
 UI = os.path.join(os.environ.get("CGTKUIPATH"), "task_manager.ui")
 FormClass, BaseClass = cgtk_qt.load_ui_type(UI)
+strack_server = strack_server_temp.get_strack_server()  # todo: get strack server
 
 
 class TaskManager(FormClass, BaseClass):
@@ -27,9 +36,13 @@ class TaskManager(FormClass, BaseClass):
             "entity_combo": self.entity_combo,
             "task_combo": self.task_combo
         }
+        self.current_page = 1
+
+        self.task_appender = TaskAppender(self)
+
         # init combo data
         # fixme: get data via functions
-        self.project_combo.item_list = ["bigBunny", "god", "hello"]
+        self.project_combo.item_list = self.all_projects()
         self.area_combo.item_list = ["Asset", "Shot"]  # always be this, hard coded
 
         # set tasks model
@@ -47,8 +60,13 @@ class TaskManager(FormClass, BaseClass):
         self.task_combo.currentIndexChanged.connect(self.update_versions)
 
         # project and area combo effect task tree
-        self.project_combo.currentIndexChanged.connect(self.on_combo_index_changed)
+        self.project_combo.currentIndexChanged.connect(self.update_task_tree)
         self.area_combo.currentIndexChanged.connect(self.update_task_tree)
+
+        # append new items when scroll bar changed
+        self.task_tree.verticalScrollBar().valueChanged.connect(self.on_taskview_scroll)
+        self.task_appender.finished.connect(self.task_model.reset)
+        self.task_appender.finished.connect(self.task_tree.expandAll)
 
         # update combos when task selected
         self.task_tree.clicked.connect(self.on_task_selected)
@@ -59,44 +77,33 @@ class TaskManager(FormClass, BaseClass):
         self.unfinished_check.clicked.connect(self.on_task_filter)
 
         # set default data
-        self.update_combo_model(self.area_combo)
         self.update_task_tree()
+
+    def all_projects(self):
+        project_nodes = strack_server.project.select()
+        return [i.get("p_name") for i in project_nodes]
 
     @property
     def project(self):
-        return self.project_combo.currentText()
+        project_name = self.project_combo.currentText().lower()
+        project_id = strack_server.project.find("p_name=%s" % project_name).get("id")
+        return {
+            "id": project_id,
+            "name": project_name
+        }
 
     @property
     def area(self):
-        return self.area_combo.currentText()
-
-    def update_task_tree(self):
-        self.task_model.clear()
-        # fixme: get tasks
-        tasks = TEST_TASKS[self.area]
-        my_tasks_only = self.my_task_check.isChecked()
-        if my_tasks_only:
-            # tasks = strack_server.task.select(filter="assignee=%s" % strack_server.login)
-            pass
-        else:
-            # tasks = strack_server.task.select()
-            pass
-        # todo: get entities and parents
-        for task in tasks:
-            entity = task.get("entity")
-            parent = entity.get("parent")
-            parent_node = self.task_model.root_node.find(parent)
-            if parent_node:
-                entity_node = parent_node.find(entity)
-                if not entity_node:
-                    entity_node = EntityNode(entity, parent_node)
-            else:
-                parent_node = ParentNode(parent, self.task_model.root_node)
-                entity_node = EntityNode(entity, parent_node)
-
-            TaskNode(task, entity_node)
-        self.task_model.reset()
-        self.task_tree.expandAll()
+        area_map = {
+            "pre-production": 30,
+            "asset": 40,
+            "shot": 70
+        }
+        area_name = self.area_combo.currentText().lower()
+        return {
+            "id": area_map.get(area_name),
+            "name": area_name
+        }
 
     def set_combo(self, key, value):
         if key in self.__combo_dict:
@@ -122,10 +129,10 @@ class TaskManager(FormClass, BaseClass):
             parent_name = parent_node.name()
             entity_name = entity_node.name()
             task_name = selected_node.name()
-        # set combos
-        self.set_combo("parent_combo", parent_name)
-        self.set_combo("entity_combo", entity_name)
-        self.set_combo("task_combo", task_name)
+            # todo: set combos
+            # self.set_combo("parent_combo", parent_name)
+            # self.set_combo("entity_combo", entity_name)
+            # self.set_combo("task_combo", task_name)
 
     def on_task_filter(self, name=None):
         if self.sender != self.task_filter_edit:
@@ -138,106 +145,141 @@ class TaskManager(FormClass, BaseClass):
             self.proxy_model.unfinished_only = True
         else:
             self.proxy_model.unfinished_only = False
-        self.proxy_model.setFilterKeyColumn(2)
+        self.proxy_model.setFilterKeyColumn(3)
         self.proxy_model.setFilterRegExp(name)
         self.task_tree.expandAll()
 
     def on_combo_index_changed(self):
         combo = self.sender()
-        self.update_combo_model(combo)
+        # self.update_combo_model(combo)
 
-    def update_combo_model(self, combo):
-        project = self.project_combo.currentText()
-        area = self.area_combo.currentText()
-        parent = self.parent_combo.currentText()
-        entity = self.entity_combo.currentText()
-        if combo.objectName() == "area_combo":
-            self.parent_combo.item_list = self.__get_parent_items(project, area)
-        elif combo.objectName() == "parent_combo":
-            self.entity_combo.item_list = self.__get_entity_items(project, area, parent)
-        elif combo.objectName() == "entity_combo":
-            self.task_combo.item_list = self.__get_task_items(project, area, parent, entity)
+    def on_taskview_scroll(self, value):
+        scroll_bar = self.task_tree.verticalScrollBar()
+        threshold = scroll_bar.maximum()*0.85
+        if value > threshold:
+            # make nodes
+            # self.append_items()
+            self.task_appender.start()
 
-    def __get_parent_items(self, project, area):
-        # todo: get sequences or asset types via api
-        if project and area:
-            if area == "Asset":
-                return ["Character", "Prop", "Environment"]  # fixme: get from strack
-            else:
-                # seq_list = strack_server.sequence.select("project=project")
-                # return [i.get("name") for i in seq_list]
-                return sorted(list(set([i["entity"]["parent"]["name"] for i in TEST_TASKS["Shot"]])))
+    # def update_combo_model(self, combo):
+    #     project = self.project_combo.currentText()
+    #     area = self.area_combo.currentText()
+    #     parent = self.parent_combo.currentText()
+    #     entity = self.entity_combo.currentText()
+    #     if combo.objectName() == "area_combo":
+    #         self.parent_combo.item_list = self.__get_parent_items(project, area)
+    #     elif combo.objectName() == "parent_combo":
+    #         self.entity_combo.item_list = self.__get_entity_items(project, area, parent)
+    #     elif combo.objectName() == "entity_combo":
+    #         self.task_combo.item_list = self.__get_task_items(project, area, parent, entity)
 
-    def __get_entity_items(self, project, area, parent):
-        # todo: get shots via api
-        if project and area and parent:
-            if area == "Asset":
-                # return strack_server.Asset.select("project=project and category=parent")
-                return sorted(list(set([i["entity"]["name"] for i in TEST_TASKS["Asset"]])))
-            else:
-                # return strack_server.Shot.select("project=project and sequence=parent")
-                return sorted(list(set([i["entity"]["name"] for i in TEST_TASKS["Shot"]])))
+    def update_task_tree(self):
 
-    def __get_task_items(self, project, area, parent, entity):
-        # todo： get tasks via api
-        if project and area and parent and entity:
-            if area == "Asset":
-                # return strack_server.Asset.select("project=project and category=parent")
-                return sorted(list(set([i["name"] for i in TEST_TASKS["Asset"] if
-                                        i["entity"]["name"] == entity and i["entity"]["parent"]["name"] == parent])))
-            else:
-                # return strack_server.Shot.select("project=project and sequence=parent")
-                return sorted(list(set([i["name"] for i in TEST_TASKS["Shot"] if
-                                        i["entity"]["name"] == entity and i["entity"]["parent"]["name"] == parent])))
+        # clear all models
+        self.task_model.clear()
+        self.current_page = 1
+        self.parent_combo.item_list = []
+        self.entity_combo.item_list = []
+        self.task_combo.item_list = []
+        # parent key map
+        # select items of project and area
+        items = self.__next_page_items()
+        # items = strack_server.item.select("p_id=%s and type=%s" % (project_id, area_id))
+        length = strack_server.item.summary("item_id",
+                                            "p_id=%s and type=%s" % (self.project.get("id"), self.area.get("id")),
+                                            "count")
+        self.__make_nodes(items)
+
+    def __make_nodes(self, items):
+        if self.area.get("name") == "asset":
+            parent_key = "category"
+        else:
+            parent_key = "sequenceid"
+        for item in items:
+            tasks = strack_server.task.select("item_id=%s" % item.get("id"))
+            first_task = next(tasks, None)
+            if not first_task:
+                continue
+            tasks = itertools.chain([first_task], tasks)
+
+            parent = item.get(parent_key) or "None"
+            parent_node = self.task_model.root_node.find(parent)
+            item_node = parent_node.find(item.get("item_name")) if parent_node else None
+            if not parent_node:
+                parent_node = ParentNode(parent, self.task_model.root_node)
+                # self.parent_combo.item_list.append(parent_node.name())
+            if not item_node:
+                item_node = EntityNode(item, parent_node)
+                # self.entity_combo.item_list.append(item_node.name())
+
+            for task in tasks:
+                task_node = TaskNode(task, item_node)
+                # self.task_combo.item_list.append(task_node.name())
+
+        self.task_model.reset()
+        self.task_tree.expandAll()
+
+    def append_items(self):
+        new_items = self.__next_page_items()
+        self.__make_nodes(new_items)
+
+    def __next_page_items(self):
+        items = strack_server.item.select("p_id=%s and type=%s" % (self.project.get("id"), self.area.get("id")),
+                                          page=[{"pagenum": self.current_page, "pagesize": 20}])
+        self.current_page += 1
+        return items
 
     def update_versions(self):
         # todo: get versions in version path or via api
         pass
 
 
-# todo: delete this
-TEST_TASKS = {
-    "Shot": [
-        {"entity": {"name": "001",
-                    "parent": {"name": "001"}
-                    },
-         "name": "Anim",
-         "status": "in progress"
-         },
-        {"entity": {"name": "002",
-                    "parent": {"name": "001"}
-                    },
-         "name": "Light",
-         "status": "approved"
-         },
-        {"entity": {"name": "001",
-                    "parent": {"name": "002"}
-                    },
-         "name": "Layout",
-         "status": "reviewing"
-         },
-        {"entity": {"name": "002",
-                    "parent": {"name": "002"}
-                    },
-         "name": "Anim",
-         "status": "in progress"
-         }
-    ],
-    "Asset": [
-        {"entity": {"name": "Hero",
-                    "parent": {"name": "Character"}
-                    },
-         "name": "Model",
-         "status": "in progress"
-         },
-        {"entity": {"name": "Sword",
-                    "parent": {"name": "Prop"}
-                    },
-         "name": "Rig",
-         "status": "approved"
-         },
-    ]
-}
+class TaskAppender(QtCore.QThread):
+    def __init__(self, task_manager):
+        super(TaskAppender, self).__init__()
+
+        self.obj = task_manager
+
+    def run(self):
+        # print ">>>", self.obj.current_page
+        # print "-->", self.obj.task_model.rowCount(self.obj.task_model.root_node)
+        new_items = self.__next_page_items()
+        self.__make_nodes(new_items)
+
+    def __make_nodes(self, items):
+        if self.obj.area.get("name") == "asset":
+            parent_key = "category"
+        else:
+            parent_key = "sequenceid"
+        for item in items:
+            if not item:
+                return False
+            tasks = strack_server.task.select("item_id=%s" % item.get("id"))
+            first_task = next(tasks, None)
+            if not first_task:
+                continue
+            tasks = itertools.chain([first_task], tasks)
+
+            parent = item.get(parent_key) or "None"
+            parent_node = self.obj.task_model.root_node.find(parent)
+            item_node = parent_node.find(item.get("item_name")) if parent_node else None
+            if not parent_node:
+                parent_node = ParentNode(parent, self.obj.task_model.root_node)
+                # self.parent_combo.item_list.append(parent_node.name())
+            if not item_node:
+                item_node = EntityNode(item, parent_node)
+                # self.entity_combo.item_list.append(item_node.name())
+
+            for task in tasks:
+                task_node = TaskNode(task, item_node)
+                # self.task_combo.item_list.append(task_node.name())
+        return True
+
+    def __next_page_items(self):
+        items = strack_server.item.select("p_id=%s and type=%s" % (self.obj.project.get("id"), self.obj.area.get("id")),
+                                          page={"pagenum": self.obj.current_page, "pagesize": 20})
+        self.obj.current_page += 1
+        return items
 
 if __name__ == "__main__":
     app = QtGui.QApplication([])
