@@ -55,6 +55,8 @@ class TaskManager(FormClass, BaseClass):
 
         # filter
         self.task_filter_edit.textChanged.connect(self.on_task_filter)
+        self.my_task_check.clicked.connect(self.on_task_filter)
+        self.unfinished_check.clicked.connect(self.on_task_filter)
 
         # set default data
         self.update_combo_model(self.area_combo)
@@ -125,7 +127,17 @@ class TaskManager(FormClass, BaseClass):
         self.set_combo("entity_combo", entity_name)
         self.set_combo("task_combo", task_name)
 
-    def on_task_filter(self, name):
+    def on_task_filter(self, name=None):
+        if self.sender != self.task_filter_edit:
+            name = self.task_filter_edit.text() or r"."  # filter edit changed the reg will be name, else it should be "."
+        if self.my_task_check.isChecked():
+            self.proxy_model.my_tasks_only = True
+        else:
+            self.proxy_model.my_tasks_only = False
+        if self.unfinished_check.isChecked():
+            self.proxy_model.unfinished_only = True
+        else:
+            self.proxy_model.unfinished_only = False
         self.proxy_model.setFilterKeyColumn(2)
         self.proxy_model.setFilterRegExp(name)
         self.task_tree.expandAll()

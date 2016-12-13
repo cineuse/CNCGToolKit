@@ -157,6 +157,8 @@ class scriptEditorClass(QMainWindow, ui.Ui_scriptEditor):
             return menu
 
     def addArgs(self):
+        if len(sys.argv) == 1:
+            return
         f = sys.argv[-1]
         if os.path.exists(f):
             if not os.path.basename(f) == os.path.basename(__file__):
