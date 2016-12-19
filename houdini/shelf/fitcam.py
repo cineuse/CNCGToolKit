@@ -43,8 +43,9 @@ def setfit(oldcam, resx, resy):
     focal = " ch(\"" + relativepath + "/focal\")"
     aperture = " ch(\"" + relativepath + "/aperture\")"
     vm_background = " ch(\"" + relativepath + "/vm_background\")"
-    newcam.setParmExpressions(dict(resx=resx, resy=resy, focal=focal,
-                                   aperture=aperture, vm_background=vm_background))
+    newcam.setParmExpressions(dict(resx=resx, resy=resy,
+                                   focal=focal,aperture=aperture,
+                                   vm_background=vm_background))
     newcam.parm("vm_bgenable").set(0)
     newcam.parm("vm_bgenable").set(0)
     newcam.parm("vm_bgenable").lock(True)
@@ -56,8 +57,11 @@ def main():
     sel = view.selectObjects('请选择一个相机', allowed_types=('cam',))
     if len(sel) > 0:
         if sel[0].type().name() == 'cam':
-            resolution = hou.ui.readInput('set Resolution', buttons=('Set', 'close'), title='set Resolution',
-                                          initial_contents='1920-1080', close_choice=1, default_choice=0)
+            resolution = hou.ui.readInput('set Resolution',
+                                          buttons=('Set', 'close'),
+                                          title='set Resolution',
+                                          initial_contents='1920-1080',
+                                          close_choice=1, default_choice=0)
             resx = resolution[1].split('-')[0]
             resy = resolution[1].split('-')[1]
             oldcam = sel[0]
