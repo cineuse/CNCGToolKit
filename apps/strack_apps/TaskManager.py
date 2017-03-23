@@ -13,15 +13,19 @@ from TaskTreeModel import TaskTreeModel, TaskFilterProxyModel, TaskNode, EntityN
 
 import sys
 
-sys.path.append(r"E:\repos\strack_python_api\src\strack_api")
+sys.path.append(r"D:\aaron\repos\strack_python_api\src\strack_api")
 import strack
 import strack_server_temp
 
 log = cgtk_log.cgtk_log(level=logging.INFO)
 
+# ------temp-------- #
+# fixme: delete temp code
+os.environ.setdefault("CGTKUIPATH", r"E:\repos\CNCGToolKit\uis")
+# ------temp end ------ #
 UI = os.path.join(os.environ.get("CGTKUIPATH"), "task_manager.ui")
 FormClass, BaseClass = cgtk_qt.load_ui_type(UI)
-strack_server = strack_server_temp.get_strack_server()  # todo: get strack server
+strack_server = strack_server_temp.get_strack_server()
 
 
 class TaskManager(FormClass, BaseClass):
@@ -151,7 +155,7 @@ class TaskManager(FormClass, BaseClass):
 
     def on_combo_index_changed(self):
         combo = self.sender()
-        # self.update_combo_model(combo)
+        self.update_combo_model(combo)
 
     def on_taskview_scroll(self, value):
         scroll_bar = self.task_tree.verticalScrollBar()
@@ -161,17 +165,17 @@ class TaskManager(FormClass, BaseClass):
             # self.append_items()
             self.task_appender.start()
 
-    # def update_combo_model(self, combo):
-    #     project = self.project_combo.currentText()
-    #     area = self.area_combo.currentText()
-    #     parent = self.parent_combo.currentText()
-    #     entity = self.entity_combo.currentText()
-    #     if combo.objectName() == "area_combo":
-    #         self.parent_combo.item_list = self.__get_parent_items(project, area)
-    #     elif combo.objectName() == "parent_combo":
-    #         self.entity_combo.item_list = self.__get_entity_items(project, area, parent)
-    #     elif combo.objectName() == "entity_combo":
-    #         self.task_combo.item_list = self.__get_task_items(project, area, parent, entity)
+    def update_combo_model(self, combo):
+        project = self.project_combo.currentText()
+        area = self.area_combo.currentText()
+        parent = self.parent_combo.currentText()
+        entity = self.entity_combo.currentText()
+        if combo.objectName() == "area_combo":
+            self.parent_combo.item_list = self.__get_parent_items(project, area)
+        elif combo.objectName() == "parent_combo":
+            self.entity_combo.item_list = self.__get_entity_items(project, area, parent)
+        elif combo.objectName() == "entity_combo":
+            self.task_combo.item_list = self.__get_task_items(project, area, parent, entity)
 
     def update_task_tree(self):
 
@@ -282,8 +286,11 @@ class TaskAppender(QtCore.QThread):
         return items
 
 if __name__ == "__main__":
+    print "hello"
     app = QtGui.QApplication([])
+    print app
     win = TaskManager()
+    print win
     win.show()
     # print win.project_combo.__class__
 

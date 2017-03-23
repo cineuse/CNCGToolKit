@@ -14,7 +14,7 @@ class outputClass(QTextBrowser):
     def showMessage(self, msg):
         self.moveCursor(QTextCursor.End)
         cursor = self.textCursor()
-        cursor.insertText(str(msg)+'\n')
+        cursor.insertText(msg+'\n')
         self.setTextCursor(cursor)
         self.moveCursor(QTextCursor.End)
         self.ensureCursorVisible()

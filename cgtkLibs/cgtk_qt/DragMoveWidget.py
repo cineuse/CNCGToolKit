@@ -30,4 +30,8 @@ class DragMoveWidget(QtGui.QWidget):
 
 
 if __name__ == "__main__":
-    pass
+    app = QtGui.QApplication([])
+    wgt = DragMoveWidget()
+    wgt.show()
+    app.exec_()
+

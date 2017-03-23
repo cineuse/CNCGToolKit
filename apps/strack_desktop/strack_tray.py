@@ -28,11 +28,13 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         # todo: 重构为表驱动
         app = QtGui.QApplication.instance()
         action_list = []
+        strack_connection = QtGui.QAction("Strack&Connection", self, triggered=self.call_mainUI)
         script_editor = QtGui.QAction("&ScriptEditor", self, triggered=self.call_script_editor)
         configAction = QtGui.QAction("&Config", self, triggered=self.call_configUI)
         helpAction = QtGui.QAction("&Help", self, triggered=self.call_helpUI)
         feedbackAction = QtGui.QAction("&FeedBack", self, triggered=self.call_feedbackUI)
         quitAction = QtGui.QAction("&Quit", self, triggered=app.quit)
+        action_list.append(strack_connection)
         action_list.append(script_editor)
         action_list.append(configAction)
         action_list.append(helpAction)
