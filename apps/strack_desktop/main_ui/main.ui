@@ -617,7 +617,7 @@ border-bottom-left-radius:2px;</string>
           <number>0</number>
          </property>
          <item>
-          <layout class="QHBoxLayout" name="menu_layout" stretch="0,0,0">
+          <layout class="QHBoxLayout" name="menu_layout" stretch="0,0,0,0,0">
            <item>
             <spacer name="horizontalSpacer_7">
              <property name="orientation">
@@ -654,6 +654,42 @@ QToolButton#menu_btn::checked
              </property>
              <property name="checkable">
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Maximum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>15</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QToolButton" name="console_btn">
+             <property name="styleSheet">
+              <string notr="true">QToolButton#console_btn
+{
+	image: url(:/icons/console_gray.png);
+	height: 20px;
+	border: none;
+}
+
+QToolButton#console_btn::hover
+{
+	image: url(:/icons/console_blue.png);
+}</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>

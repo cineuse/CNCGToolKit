@@ -27,62 +27,13 @@
     <number>10</number>
    </property>
    <item>
-    <widget class="QGroupBox" name="cgapp_grp">
+    <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>CG Apps</string>
+      <string>Choose a Context</string>
      </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
-       <number>2</number>
-      </property>
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QListWidget" name="actions_list">
-        <property name="styleSheet">
-         <string notr="true">border: none;</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="autoScrollMargin">
-         <number>16</number>
-        </property>
-        <property name="dragDropMode">
-         <enum>QAbstractItemView::NoDragDrop</enum>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>60</width>
-          <height>60</height>
-         </size>
-        </property>
-        <property name="movement">
-         <enum>QListView::Static</enum>
-        </property>
-        <property name="isWrapping" stdset="0">
-         <bool>true</bool>
-        </property>
-        <property name="resizeMode">
-         <enum>QListView::Adjust</enum>
-        </property>
-        <property name="spacing">
-         <number>20</number>
-        </property>
-        <property name="viewMode">
-         <enum>QListView::IconMode</enum>
-        </property>
-        <property name="batchSize">
-         <number>100</number>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QComboBox" name="context_combo"/>
       </item>
      </layout>
     </widget>
@@ -94,7 +45,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QListWidget" name="actions_list_2">
+       <widget class="QListWidget" name="actions_list">
         <property name="styleSheet">
          <string notr="true">border: none;</string>
         </property>

@@ -1,5 +1,8 @@
 <RCC>
   <qresource>
+    <file>icons/console_blue.png</file>
+    <file>icons/console_dark_blue.png</file>
+    <file>icons/console_gray.png</file>
     <file>icons/action_blue.png</file>
     <file>icons/action_dark_blue.png</file>
     <file>icons/action_gray.png</file>

@@ -16,8 +16,9 @@ class DeadlineSubmission(object):
         object.__init__(self)
         self.job_id = None
 
-        deadline_cfg = studio_config.get('deadline')
-        python_cfg = studio_config.get('python')
+        studio_cfg = studio_config.StudioConfig()
+        deadline_cfg = studio_cfg.get('deadline')
+        python_cfg = studio_cfg.get('python')
 
         self.deadline_path = deadline_cfg.get("path")
         self.executable = python_cfg.get("path")

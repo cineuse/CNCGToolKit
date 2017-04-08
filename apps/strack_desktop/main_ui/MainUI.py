@@ -15,6 +15,7 @@ from actions_ui import ActionsUI
 from mytasks_ui import MyTasksUI
 from publish_ui import PublishUI
 from chat_ui import ChatUI
+from console_ui import ConsoleUI
 
 
 UI = os.path.join(current_dir, "main.ui")
@@ -62,6 +63,9 @@ class MainUI(FormClass, BaseClass):
         # change tab page
         self.tab_btn_grp.buttonClicked.connect(self.tab_change)
 
+        # console button clicked
+        self.console_btn.clicked.connect(self.show_console)
+
     def tab_change(self):
         page_dict = {"action_btn": 0,
                      "task_btn": 1,
@@ -70,6 +74,10 @@ class MainUI(FormClass, BaseClass):
         sender = self.tab_btn_grp.checkedButton()
         page_index = page_dict.get(sender.objectName())
         self.work_stack.setCurrentIndex(page_index)
+
+    def show_console(self):
+        app = QtGui.QApplication.instance()
+        self.console = cgtk_qt.render_gui(GUIClass=ConsoleUI, app=app, style="strack_main", singleton=True)
 
 
 def mousePressEvent(obj, event):
