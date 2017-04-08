@@ -19,8 +19,7 @@ import Qt.QtCore as QtCore
 # Local modules
 
 
-QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName("utf8"))
-
+QtCore.QTextCodec.setCodecForLocale(QtCore.QTextCodec.codecForName("utf8"))
 
 def progress_dialog(num, info="In Process..."):
     """

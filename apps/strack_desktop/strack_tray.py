@@ -25,21 +25,21 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         self.feedback_window = None
 
     def create_actions(self):
-        # todo: 重构为表驱动
         app = QtGui.QApplication.instance()
+
+        ACTIONS = {
+            "Strack&Connection": self.call_mainUI,
+            "&ScriptEditor": self.call_script_editor,
+            "&Config": self.call_configUI,
+            "&Help": self.call_helpUI,
+            "&FeedBack": self.call_feedbackUI,
+            "&Quit": app.quit,
+        }
+
         action_list = []
-        strack_connection = QtGui.QAction("Strack&Connection", self, triggered=self.call_mainUI)
-        script_editor = QtGui.QAction("&ScriptEditor", self, triggered=self.call_script_editor)
-        configAction = QtGui.QAction("&Config", self, triggered=self.call_configUI)
-        helpAction = QtGui.QAction("&Help", self, triggered=self.call_helpUI)
-        feedbackAction = QtGui.QAction("&FeedBack", self, triggered=self.call_feedbackUI)
-        quitAction = QtGui.QAction("&Quit", self, triggered=app.quit)
-        action_list.append(strack_connection)
-        action_list.append(script_editor)
-        action_list.append(configAction)
-        action_list.append(helpAction)
-        action_list.append(feedbackAction)
-        action_list.append(quitAction)
+        for label, command in ACTIONS.iteritems():
+            action_list.append(QtGui.QAction(label, self, triggered=command))
+
         return action_list
 
     def create_context_menu(self):

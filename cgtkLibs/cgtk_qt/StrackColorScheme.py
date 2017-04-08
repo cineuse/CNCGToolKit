@@ -1,7 +1,8 @@
 """Classdocs
 """
 import ConfigParser
-from Qt.QtGui import QColor, QPalette, QApplication, QMainWindow, QBrush
+from Qt.QtGui import QColor, QPalette, QBrush
+from Qt.QtWidgets import QApplication, QMainWindow
 
 
 class StrackColorScheme(object):
