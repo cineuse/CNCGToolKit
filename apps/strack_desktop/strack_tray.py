@@ -1,8 +1,7 @@
 # coding=utf8
+import logging
 
 import Qt.QtGui as QtGui
-import Qt.QtCore as QtCore
-import icons_rc
 
 import cgtk_qt
 import main_ui
@@ -23,6 +22,8 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         self.config_window = None
         self.help_window = None
         self.feedback_window = None
+
+        self.init_logger()
 
     def create_actions(self):
         app = QtGui.QApplication.instance()
@@ -71,6 +72,12 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         # todo: show config UI
         print "show feedback UI here..."
 
+    def init_logger(self):
+        from console_ui.strack_log import StrackLogHandler
+        self.logger = logging.getLogger("strack_connection")
+        self.logger.setLevel(logging.DEBUG)
+        self.log_handler = StrackLogHandler()
+        self.logger.addHandler(self.log_handler)
+
 if __name__ == '__main__':
-    import standalone_env
     cgtk_qt.render_gui(StrackTrayIcon)

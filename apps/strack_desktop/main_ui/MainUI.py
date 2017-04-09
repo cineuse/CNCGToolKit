@@ -77,7 +77,7 @@ class MainUI(FormClass, BaseClass):
 
     def show_console(self):
         app = QtGui.QApplication.instance()
-        self.console = cgtk_qt.render_gui(GUIClass=ConsoleUI, app=app, style="strack_main", singleton=True)
+        self.console = cgtk_qt.render_gui(GUIClass=ConsoleUI, app=app, style="default", singleton=True)
 
 
 def mousePressEvent(obj, event):

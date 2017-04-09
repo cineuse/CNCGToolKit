@@ -1,25 +1,26 @@
 # coding=utf8
 # Copyright (c) 2017 Strack
 
-import os
-import sys
 import logging
 import logging.handlers
 
-from Qt import QtGui
+from LoggerWidget import LoggerWidget
 
 
 class StrackLogHandler(logging.Handler):
     def __init__(self, log_format='%(asctime)s - %(name)s - %(filename)s:%(lineno)s - %(message)s', parent=None):
         super(StrackLogHandler, self).__init__()
 
-        self.widget = None
-        self.widget = QtGui.QPlainTextEdit(parent)
-        self.widget.setReadOnly(True)
-
         formatter = logging.Formatter(log_format)
         self.setFormatter(formatter)
 
     def emit(self, record):
+        style_dict = {
+            "DEBUG": "<font color=#00FFFF>%s</font>",
+            "INFO": "<font color=#00FF00>%s</font>",
+            "WARNING": "<font color=#F0E68C>%s</font>",
+            "ERROR": "<font color=#FF0000>%s</font>",
+        }
         msg = self.format(record)
-        self.widget.appendPlainText(msg)
+        widget = LoggerWidget()
+        widget.appendHtml(style_dict.get(record.levelname, "DEBUG") % msg)

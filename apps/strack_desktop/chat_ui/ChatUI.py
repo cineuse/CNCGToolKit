@@ -1,7 +1,7 @@
 # coding=utf8
-
+import logging
 import os
-import Qt.QtGui as QtGui
+
 import cgtk_qt
 
 current_dir = os.path.dirname(__file__)
@@ -14,6 +14,13 @@ class ChatUI(FormClass, BaseClass):
         super(ChatUI, self).__init__(parent)
         # setup ui
         self.setupUi(self)
+
+        self.log = logging.getLogger("strack_connection")
+        self.test_btn.clicked.connect(self.log_something)
+
+    def log_something(self):
+        self.log.error("what? something wrong!")
+
 
 if __name__ == "__main__":
     cgtk_qt.render_gui(ChatUI)
