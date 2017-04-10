@@ -1,0 +1,251 @@
+/* Global CSS */
+
+* {
+	outline: none;
+	color: #DDD;
+
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+/* General CSS */
+
+QMenu {
+    background-color: #555; /* sets background of the menu */
+    border: 1px solid #222;
+}
+
+QMenu::item {
+    /* sets background of menu item. set this to something non-transparent
+        if you want menu color and menu item color to be different */
+    background-color: transparent;
+    padding: 5px;
+    padding-left: 30px;
+}
+
+QMenu::item:selected { /* when user selects item using mouse or keyboard */
+    background-color: #666;
+}
+
+QDialog {
+	min-width: 300;
+	background: "#555";
+}
+
+QListView {
+	border: 0px;
+	background: "transparent"
+}
+
+QPushButton {
+	width: 27px;
+	height: 27px;
+	background: #555;
+	border: 1px solid #333;
+	font-family: "FontAwesome";
+	font-size: 11pt;
+	color: white;
+}
+
+QPushButton:pressed {
+	background: "#777";
+}
+
+QPushButton:hover {
+	color: white;
+	background: "#666";
+}
+
+QPushButton:disabled {
+	color: rgba(255, 255, 255, 50);
+}
+
+QTextEdit, QLineEdit {
+	background: "#555";
+	border: 1px solid "#333";
+	font-size: 9pt;
+	color: "#fff";
+}
+
+QCheckBox {
+	min-width: 17px;
+	max-width: 17px;
+	border: 1px solid #222;
+	background: transparent;
+}
+
+QCheckBox::indicator {
+	width: 15px;
+	height: 15px;
+	/*background: #444;*/
+	background: transparent;
+	border: 1px solid #555;
+}
+
+QCheckBox::indicator:checked {
+	background: #222;
+}
+
+QComboBox {
+	background: #444;
+	color: #EEE;
+	font-size: 8pt;
+	border: 1px solid #333;
+	padding: 0px;
+}
+
+QComboBox::drop-down {
+	background: transparent;
+}
+
+QComboBox::down-arrow {
+	max-width: 0px;
+	width: 1px;
+}
+
+QComboBox QAbstractItemView {
+	background: #555;
+}
+
+QScrollBar:vertical {
+ 	border: none;
+ 	background: transparent;
+ 	width: 6px;
+ 	margin: 0;
+}
+
+QScrollBar::handle:vertical {
+ 	background: #333;
+ 	border-radius: 3px;
+ 	min-height: 20px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+ 	height: 0px;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+ 	border: 1px solid #444;
+ 	width: 3px;
+ 	height: 3px;
+ 	background: white;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+ 	background: none;
+}
+
+/* Specific CSS */
+
+#Terminal QComboBox::drop-down {
+	width: 60px;
+}
+
+#Header {
+	background: "#555";
+	border: 1px solid "#444";
+}
+
+#Header QRadioButton {
+	border-right: 1px solid #333;
+	left: 2px;
+}
+
+#Header QRadioButton::indicator {
+	width: 65px;
+	height: 40px;
+	border: 0px solid "transparent";
+	border-bottom: 3px solid "transparent";
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+#Header QRadioButton:checked {
+	background-color: rgba(255, 255, 255, 20);
+	border-bottom: 3px solid "lightblue";
+}
+
+#Body {
+	padding: 10px;
+	border: 1px solid "#333";
+	background: "#444";
+}
+
+#Header #ArtistTab {
+	background-image: url("img/tab-home.png");
+}
+
+#Header #TerminalTab {
+	background-image: url("img/tab-terminal.png");
+}
+
+#Header #OverviewTab {
+	background-image: url("img/tab-overview.png");
+}
+
+#Footer {
+	min-height: 43px;
+}
+
+#ClosingPlaceholder {
+	background: rgba(0, 0, 0, 50);
+}
+
+#CommentBox, #CommentPlaceholder {
+	font-family: Open Sans;
+	font-size: 8pt;
+	margin: 5px;
+	margin-bottom: 0px;
+	padding: 5px;
+}
+
+#CommentBox {
+	background: #444;
+	selection-background-color: #222;
+}
+
+#CommentPlaceholder {
+	color: #888
+}
+
+#Details {
+	width: 20px;
+	background: #333;
+	border: 1px solid #222;
+}
+
+#Details QLabel {
+	font-size: 8pt;
+}
+
+#Details #Header {
+	background: #444;
+	border: 1px solid #222;
+}
+
+#Details #Body {
+	background: transparent;
+}
+
+#Details #Heading {
+	font-size: 9pt;
+	font-weight: bold;
+}
+
+#Details #Subheading {
+	background: transparent;
+}
+
+#Details #Timestamp {
+	color: #999;
+}
+
+#Details #Text {
+	font-family: "Courier";
+	font-size: 9pt;
+}
+
+#Details #Icon {
+	font-family: "FontAwesome";
+	font-size: 15pt;
+}
