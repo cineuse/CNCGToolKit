@@ -58,7 +58,8 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
 
     def call_mainUI(self):
         app = QtGui.QApplication.instance()
-        self.main_window = cgtk_qt.render_gui(GUIClass=main_ui.MainUI, app=app, style="strack_main", singleton=True)
+        self.main_window = cgtk_qt.render_gui(GUIClass=main_ui.MainUI, app=app, style="strack_main",
+                                              color_scheme="default", singleton=True)
 
     def call_configUI(self):
         # todo: show config UI
@@ -78,6 +79,7 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         self.logger.setLevel(logging.DEBUG)
         self.log_handler = StrackLogHandler()
         self.logger.addHandler(self.log_handler)
+
 
 if __name__ == '__main__':
     cgtk_qt.render_gui(StrackTrayIcon)

@@ -11,7 +11,7 @@ from StrackColorScheme import StrackColorScheme
 QSS_DIR = os.path.join(os.path.dirname(__file__), "styles")
 
 
-def render_gui(GUIClass, app=None, style="default", singleton=True):
+def render_gui(GUIClass, app=None, style="default", color_scheme=None, singleton=True):
     # init event loop
     if not app:
         use_default_app = True
@@ -33,7 +33,25 @@ def render_gui(GUIClass, app=None, style="default", singleton=True):
             if gui_obj.objectName() == widget.objectName():
                 widget.close()
     # set Color Scheme
-    StrackColorScheme(baseColor=QtGui.QColor(50, 50, 50), highlightColor=QtGui.QColor(247, 147, 30), spread=2.5)
+    color_scheme_dict = {
+        "dark": {
+            "baseColor": QtGui.QColor(50, 50, 50),
+            "highlightColor": QtGui.QColor(247, 147, 30),
+            "spread": 2.5
+        },
+        "light": {
+            "baseColor": QtGui.QColor("#eee"),
+            "highlightColor": QtGui.QColor("#fff"),
+            "spread": 2.5
+        },
+        "default": {
+            "baseColor": QtGui.QColor("#f7f7f7"),
+            "highlightColor": QtGui.QColor("#2196F3"),
+            "spread": 2.5
+        }
+    }
+    if color_scheme and (color_scheme in color_scheme_dict):
+        StrackColorScheme(**color_scheme_dict.get(color_scheme))
     # run gui
     gui_obj.show()
     # don't close after window closed

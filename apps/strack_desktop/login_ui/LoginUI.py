@@ -1,4 +1,5 @@
 # coding=utf8
+# Copyright (c) 2016 CineUse
 
 import os
 import sys
@@ -11,54 +12,25 @@ import cgtk_py
 import cgtk_qt
 
 current_dir = os.path.dirname(__file__)
-sys.path.insert(0, os.path.dirname(current_dir))
 
-from console_ui import ConsoleUI
-
-from StrackLogin import StrackLogin
-
-UI = os.path.join(current_dir, "main.ui")
+UI = os.path.join(current_dir, "login.ui")
 FormClass, BaseClass = cgtk_qt.load_ui_type(UI)
 
 
-class MainUI(FormClass, BaseClass):
+class LoginUI(FormClass, BaseClass):
     def __init__(self, parent=None):
-        super(MainUI, self).__init__(parent)
+        super(LoginUI, self).__init__(parent)
 
         # setup ui
         self.setupUi(self)
         self.init_ui()
 
-        # set Avatar and Name
-        me = StrackLogin()
-
-        self.name_label.setText(me.name)
-        avatar = QtWidgets.QPixmap(me.avatar_path).scaled(80, 80)
-        self.avatar_label.setPixmap(avatar)
-
-        # make tab button radio
-        self.tab_btn_grp = QtWidgets.QButtonGroup()
-        self.tab_btn_grp.addButton(self.action_btn)
-        self.tab_btn_grp.addButton(self.task_btn)
-        self.tab_btn_grp.addButton(self.publish_btn)
-        self.tab_btn_grp.addButton(self.chat_btn)
-        self.tab_btn_grp.setExclusive(True)
-
-        # change tab page
-        self.tab_btn_grp.buttonClicked.connect(self.tab_change)
-
-        # console button clicked
-        self.console_btn.clicked.connect(self.show_console)
-
     def init_ui(self):
         # hide title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        # add a size grip
-        size_grip = QtGui.QSizeGrip(self)
-        self.sizegrip_layout.addWidget(size_grip, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
         # shadow effect
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        shadow = QtGui.QGraphicsDropShadowEffect(self)
+        shadow = QtWidgets.QGraphicsDropShadowEffect(self)
         shadow.setBlurRadius(15)
         shadow.setOffset(0, 0)
         self.main_frame.setGraphicsEffect(shadow)
@@ -71,19 +43,6 @@ class MainUI(FormClass, BaseClass):
         cgtk_py.implant_method(self.user_info_grp, mousePressEvent, "mousePressEvent")
         cgtk_py.implant_method(self.user_info_grp, mouseMoveEvent, "mouseMoveEvent")
         cgtk_py.implant_method(self.user_info_grp, mouseReleaseEvent, "mouseReleaseEvent")
-
-    def tab_change(self):
-        page_dict = {"action_btn": 0,
-                     "task_btn": 1,
-                     "publish_btn": 2,
-                     "chat_btn": 3}
-        sender = self.tab_btn_grp.checkedButton()
-        page_index = page_dict.get(sender.objectName())
-        self.work_stack.setCurrentIndex(page_index)
-
-    def show_console(self):
-        app = QtGui.QApplication.instance()
-        self.console = cgtk_qt.render_gui(GUIClass=ConsoleUI, app=app, style="default", color_scheme="dark", singleton=True)
 
 
 def mousePressEvent(obj, event):
@@ -105,4 +64,8 @@ def mouseReleaseEvent(obj, event):
 
 
 if __name__ == "__main__":
-    cgtk_qt.render_gui(MainUI)
+    cgtk_qt.render_gui(LoginUI, style="strack_main", singleton=True)
+    # app = QtGui.QApplication([])
+    # dlg = LoginUI()
+    # dlg.show()
+    # app.exec_()
