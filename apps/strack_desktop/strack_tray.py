@@ -23,22 +23,21 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
         self.help_window = None
         self.feedback_window = None
 
-        self.init_logger()
 
     def create_actions(self):
         app = QtGui.QApplication.instance()
 
-        ACTIONS = {
-            "Strack&Connection": self.call_mainUI,
-            "&ScriptEditor": self.call_script_editor,
-            "&Config": self.call_configUI,
-            "&Help": self.call_helpUI,
-            "&FeedBack": self.call_feedbackUI,
-            "&Quit": app.quit,
-        }
+        ACTIONS_MAP = [
+            ("Strack&Connection", self.call_mainUI),
+            ("&ScriptEditor", self.call_script_editor),
+            ("&Config", self.call_configUI),
+            ("&Help", self.call_helpUI),
+            ("&FeedBack", self.call_feedbackUI),
+            ("&Quit", app.quit),
+        ]
 
         action_list = []
-        for label, command in ACTIONS.iteritems():
+        for label, command in ACTIONS_MAP:
             action_list.append(QtGui.QAction(label, self, triggered=command))
 
         return action_list
@@ -72,13 +71,6 @@ class StrackTrayIcon(QtGui.QSystemTrayIcon):
     def call_feedbackUI(self):
         # todo: show config UI
         print "show feedback UI here..."
-
-    def init_logger(self):
-        from console_ui.strack_log import StrackLogHandler
-        self.logger = logging.getLogger("strack_connection")
-        self.logger.setLevel(logging.DEBUG)
-        self.log_handler = StrackLogHandler()
-        self.logger.addHandler(self.log_handler)
 
 
 if __name__ == '__main__':

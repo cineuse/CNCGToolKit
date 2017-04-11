@@ -18,8 +18,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>450</width>
-    <height>330</height>
+    <width>4500</width>
+    <height>3500</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -29,10 +29,9 @@
    <string notr="true">QDialog{
 	background-color: #fff;
 }
-
 </string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0">
+  <layout class="QVBoxLayout" name="main_layout" stretch="0">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -48,7 +47,8 @@
 	border: 1px solid #aaa;
     padding: 5px;
     border-radius: 2px;
-}</string>
+}
+</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -56,7 +56,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="main_frame_layout">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -355,9 +355,19 @@ QToolButton#close_btn::hover
       <item>
        <widget class="QGroupBox" name="body">
         <property name="styleSheet">
-         <string notr="true">background-color: #eee;</string>
+         <string notr="true">QGroupBox#body{
+	background-color: #eee;
+	padding:0;
+	margin:0;
+	border-style:soild;
+	border-width: 0px;
+	border-top-left-radius:0px;
+	border-top-right-radius:0px;
+	border-bottom-right-radius:2px;
+	border-bottom-left-radius:2px;
+}</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="body_layout">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -429,7 +439,7 @@ QToolButton#close_btn::hover
 </string>
                  </property>
                  <property name="text">
-                  <string>自动登录</string>
+                  <string>Auto Login</string>
                  </property>
                 </widget>
                </item>
@@ -540,7 +550,6 @@ QPushButton::pressed{
  <resources>
   <include location="../../images/icons.qrc"/>
   <include location="../../images/other_images.qrc"/>
-  <include location="C:/Program Files (x86)/JetBrains/PyCharm 2016.2.2/jre/images/other_images.qrc"/>
  </resources>
  <connections>
   <connection>
